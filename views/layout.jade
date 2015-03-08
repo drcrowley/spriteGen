@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title= title + ' - ' + siteName
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+
+    script(src="/vendor/jquery.min.js")
+
+  include includes/_header
+
+  body
+    block content
