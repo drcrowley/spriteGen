@@ -5,7 +5,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var http = require('http');
 
 
 var app = express();
@@ -58,9 +57,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.set('port', (process.env.PORT || 5000));
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'));
-});
 
-//module.exports = app;
+module.exports = app;
