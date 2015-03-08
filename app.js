@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var http = require('http');
 
 
 var app = express();
@@ -57,5 +58,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.set('port', config.get('port'));
+var server = http.createServer(app);
+server.listen(config.get('port'));
 
 module.exports = app;
