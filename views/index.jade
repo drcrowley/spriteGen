@@ -3,13 +3,13 @@ extends layout
 block content
   .container
     h1= title
-    form(id="uploadForm" enctype="multipart/form-data" action="/api/photo" method="post")
+    form(id="upload" enctype="multipart/form-data" action="/api/photo" method="post")
       input(type="file" multiple name="userPhoto")
       button(type="submit") Загрузить
 
    script.
      $(document).ready(function () {
-      $('#uploadForm').submit(function () {
+      $('#upload').submit(function () {
 
       });
      });

@@ -51,15 +51,24 @@ app.post('/api/photo',function(req,res){
   }
 });
 
-var nsg = require('node-sprite-generator');
-//
-//app.use(nsg.middleware({
-//  src: [
-//    './uploads/*.png'
-//  ],
-//  spritePath: './uploads/sprite.png',
-//  stylesheetPath: './uploads/sprite.styl'
-//}));
+var fs = require('fs');
+var spritesmith = require('spritesmith');
+
+    spritesmith({src:[
+      __dirname + '/uploads/logo.png',
+      __dirname + '/uploads/sublogo.png',
+    ]}, function handleResult (err, result) {
+      // If there was an error, throw it
+      if (err) {
+        throw err;
+      }
+      // Output the image
+      fs.writeFileSync(__dirname + '/uploads/canvassmith.png', result.image, 'binary');
+      result.coordinates, result.properties; // Coordinates and properties
+    });
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
