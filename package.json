@@ -13,6 +13,7 @@
     "morgan": "~1.5.1",
     "multer": "^0.1.8",
     "nconf": "^0.7.1",
+    "node-sprite-generator": "^0.8.0",
     "serve-favicon": "~2.2.0"
   },
   "engines": {

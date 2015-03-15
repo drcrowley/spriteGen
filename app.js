@@ -51,6 +51,15 @@ app.post('/api/photo',function(req,res){
   }
 });
 
+var nsg = require('node-sprite-generator');
+//
+//app.use(nsg.middleware({
+//  src: [
+//    './uploads/*.png'
+//  ],
+//  spritePath: './uploads/sprite.png',
+//  stylesheetPath: './uploads/sprite.styl'
+//}));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
