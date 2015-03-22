@@ -46,7 +46,6 @@ app.use(multer({ dest: './uploads/',
 
 app.post('/api/photo',function(req,res){
   if(done==true){
-    console.log(req.files);
     res.end("File uploaded. ");
   }
 });
@@ -54,21 +53,44 @@ app.post('/api/photo',function(req,res){
 var fs = require('fs');
 var spritesmith = require('spritesmith');
 
-    spritesmith({src:[
-      __dirname + '/uploads/logo.png',
-      __dirname + '/uploads/sublogo.png',
-    ]}, function handleResult (err, result) {
-      // If there was an error, throw it
-      if (err) {
-        throw err;
-      }
-      // Output the image
-      fs.writeFileSync(__dirname + '/uploads/canvassmith.png', result.image, 'binary');
-      result.coordinates, result.properties; // Coordinates and properties
-    });
+var getFileList = function(filePath) {
+  fs.readdir( filePath, function(err, files) {
+    if (err) {
+      throw err;
+    }
+    var fileList = [];
+
+    for(i=0; i<files.length; i++) {
+      fileList.push(filePath + '/' + files[i]);
+    }
+    makeSprite(fileList);
+
+  });
+};
+
+var makeSprite = function(fileList) {
+  spritesmith({src:fileList}, function handleResult (err, result) {
+    if (err) {
+      throw err;
+    }
+    fs.writeFileSync(__dirname + '/public/img/canvassmith.png', result.image, 'binary');
+    result.coordinates, result.properties; // Coordinates and properties
+  });
+};
 
 
+var filePath =  __dirname + '/uploads';
 
+fs.watch(filePath, function (event, filename) {
+    getFileList(filePath);
+});
+
+getFileList(filePath);
+
+app.get('/sprite', function(req, res) {
+  var file = new fs.ReadStream(__dirname + '/public/img/canvassmith.png');
+  file.pipe(res);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
