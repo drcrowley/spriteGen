@@ -78,7 +78,6 @@ var makeSprite = function(fileList) {
   });
 };
 
-
 var filePath =  __dirname + '/uploads';
 
 fs.watch(filePath, function (event, filename) {
