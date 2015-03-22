@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e0b9cde-a084-4cbd-8f6e-04e9f12dbd81" name="Default" comment="">
-      <change type="DELETED" beforePath="E:\Git\sprite\npm-debug.log" afterPath="" />
-      <change type="DELETED" beforePath="E:\Git\sprite\uploads\canvassmith.png" afterPath="" />
-      <change type="DELETED" beforePath="E:\Git\sprite\uploads\deals_button1425855112224.png" afterPath="" />
-      <change type="DELETED" beforePath="E:\Git\sprite\uploads\footer_logo1425855444400.png" afterPath="" />
-      <change type="DELETED" beforePath="E:\Git\sprite\uploads\logo.png" afterPath="" />
-      <change type="DELETED" beforePath="E:\Git\sprite\uploads\sublogo.png" afterPath="" />
-      <change type="DELETED" beforePath="E:\Git\sprite\uploads\sublogo1426421089941.png" afterPath="" />
-      <change type="DELETED" beforePath="E:\Git\sprite\uploads\sublogo1426421372868.png" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.jade" afterPath="$PROJECT_DIR$/views/index.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="DELETED" beforePath="E:\Git\sprite\uploads\nav_ar21427038568474.png" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/img/canvassmith.png" afterPath="$PROJECT_DIR$/public/img/canvassmith.png" />
     </list>
     <ignored path="sprite.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -238,7 +229,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24400872" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24400872" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34422657" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
