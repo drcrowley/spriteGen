@@ -8,7 +8,16 @@ db.on('error', function (err) {
 });
 db.once('open', function callback () {
     console.log("Connected to DB!");
+
+    //test request
+    ArticleModel.find( { title:  "Заголовок1" }, function(err, article) {
+        if (err) throw err;
+        console.log(article);
+    });
+
 });
+
+
 
 var Schema = mongoose.Schema;
 
@@ -30,11 +39,8 @@ var Article = new Schema({
     modified: { type: Date, default: Date.now }
 });
 
-// validation
-// Article.path('title').validate(function (v) {
-//     return v.length > 0 && v.length < 70;
-// });
-
 var ArticleModel = mongoose.model('Article', Article);
+
+
 
 module.exports.ArticleModel = ArticleModel;

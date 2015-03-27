@@ -1,6 +1,6 @@
 var config = require('../config');
 
-var ArticleModel    = require('../libs/mongoose').ArticleModel;
+var ArticleModel = require('../libs/mongoose').ArticleModel;
 
 module.exports = function(app) {
 
@@ -49,6 +49,8 @@ module.exports = function(app) {
           }
       });
   });
+
+
 
 };
 
