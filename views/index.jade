@@ -1,17 +1,26 @@
 extends layout
 
 block content
-  .container
-    h1= title
-    form(id="upload" enctype="multipart/form-data" action="/api/photo" method="post")
-      input(type="file" multiple name="userPhoto")
-      button(type="submit") Загрузить
+	.container
+		h1= title
+		form(id="upload" enctype="multipart/form-data" action="/api/photo" method="post")
+			input(type="file" multiple name="userPhoto")
+			button(type="submit") Загрузить
 
-    img(src="/img/canvassmith.png")
+		img(src="/img/canvassmith.png")
 
-   script.
-     $(document).ready(function () {
-      $('#upload').submit(function () {
-
-      });
-     });
+		h1 Добавить статью
+		form(action="/api/articles" method="post")
+			.form-group
+				label Заголовок
+				input(type="text" class="form-control" name="title")
+			.form-group
+				label Автор
+				input(type="text" class="form-control" name="author")
+			.form-group
+				label Описание
+				textarea(class="form-control" name="description")
+			//- .form-group
+			//- 	label Изображание
+			//- 	input(type="text" class="form-control" name="images")
+			button(type="submit") Отправить
