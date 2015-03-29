@@ -1,11 +1,4 @@
 var config = require('../config');
-var login = require('../controllers/users/login');
-var registration = require('../controllers/users/registration');
-var logout = require('../controllers/users/logout');
-
-
-
-var ArticleModel = require('../libs/mongoose').ArticleModel;
 
 module.exports = function(app, passport) {
 
@@ -21,11 +14,11 @@ module.exports = function(app, passport) {
     res.render('index', { title: 'Главная'});
   });
 
-  app.get('/about', function(req, res) {
+  app.get('/about', isLoggedIn, function(req, res) {
     res.render('about', { title: 'О сайте'});
   });
 
-  app.get('/login', function(req, res) {
+  app.get('/login',  function(req, res) {
     res.render('login', {
       title: 'Вход',
       message: req.flash('loginMessage')
@@ -39,6 +32,11 @@ module.exports = function(app, passport) {
     });
   });
 
+  app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+
   app.post('/registration', passport.authenticate('local-signup', {
     successRedirect : '/',
     failureRedirect : '/registration',
@@ -49,7 +47,9 @@ module.exports = function(app, passport) {
     successRedirect : '/', // redirect to the secure profile section
     failureRedirect : '/login', // redirect back to the signup page if there is an error
     failureFlash : true // allow flash messages
-  }), function(req, res) {});
+  }));
+
+
 
 };
 

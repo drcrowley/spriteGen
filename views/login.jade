@@ -5,10 +5,11 @@ block content
     h4 Login to your account
     form(action='/login' method='post')
       .form-group
-        label(for='username') username
-        input(type='text' name='username' class="form-control" placeholder='Your username')
+        label(for='username') email
+        input(type='text' name='email' class="form-control" placeholder='Your email')
       .form-group
         label(for='password') Password
         input(type='password' name='password' class="form-control" placeholder='Your Password')
       button(type='submit') Login
+  if (message.length > 0)
     .alert.alert-danger= message

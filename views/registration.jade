@@ -5,10 +5,11 @@ block content
     h4 Register your account
     form(action='/registration' method='post')
       .form-group
-        label(for='username') username
-        input(type='text' name='username' class="form-control" placeholder='Your username')
+        label(for='email') Email
+        input(type='text' name='email' class="form-control" placeholder='Your Email')
       .form-group
         label(for='password') Password
         input(type='password' name='password' class="form-control" placeholder='Your Password')
       button(type="submit") Register
-    .alert.alert-danger= message
+    if (message.length > 0)
+      .alert.alert-danger= message
