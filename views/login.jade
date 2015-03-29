@@ -2,13 +2,13 @@ extends layout
 
 block content
   .container
-    h4 Register your account
-    form(action='/registration' method='post')
+    h4 Login to your account
+    form(action='/login' method='post')
       .form-group
         label(for='username') username
         input(type='text' name='username' class="form-control" placeholder='Your username')
       .form-group
         label(for='password') Password
         input(type='password' name='password' class="form-control" placeholder='Your Password')
-      button(type="submit") Register
+      button(type='submit') Login
     .alert.alert-danger= message

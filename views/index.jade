@@ -8,19 +8,3 @@ block content
 			button(type="submit") Загрузить
 
 		img(src="/img/canvassmith.png")
-
-		h1 Добавить статью
-		form(action="/api/articles" method="post")
-			.form-group
-				label Заголовок
-				input(type="text" class="form-control" name="title")
-			.form-group
-				label Автор
-				input(type="text" class="form-control" name="author")
-			.form-group
-				label Описание
-				textarea(class="form-control" name="description")
-			//- .form-group
-			//- 	label Изображание
-			//- 	input(type="text" class="form-control" name="images")
-			button(type="submit") Отправить
