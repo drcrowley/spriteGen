@@ -12,6 +12,8 @@ var flash    = require('connect-flash');
 
 var app = express();
 
+require('./libs/mongoose')();
+
 // view engine setup
 
 app.set('views', path.join(__dirname, 'views'));
