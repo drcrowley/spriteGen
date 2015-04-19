@@ -1,5 +1,7 @@
 var config = require('../config');
 
+var Settings   = require('../models/settings');
+
 module.exports = function(app, passport) {
 
 
@@ -11,8 +13,12 @@ module.exports = function(app, passport) {
   });
 
   app.get('/', isLoggedIn, function(req, res) {
-    res.render('index', { title: 'Главная'});
+    res.render('index', {
+      title: 'Главная',
+      user:  req.user.username});
   });
+
+
 
   app.get('/login',  function(req, res) {
     res.render('login', {
@@ -45,7 +51,37 @@ module.exports = function(app, passport) {
     failureFlash : true // allow flash messages
   }));
 
+  app.post('/api/settings', function(req, res) {
 
+    Settings.findOne({ 'user' :  req.user._id }, function(err, settings) {
+      if (settings) {
+
+        settings.padding = req.body.padding;
+
+        settings.save(function(err) {
+          if (err)
+            throw err;
+          res.redirect('/');
+        });
+
+      } else {
+
+        var settings = new Settings({
+          user: req.user._id,
+          padding: req.body.padding
+        });
+
+        settings.save(function(err) {
+          if (err)
+            throw err;
+          res.redirect('/');
+        });
+
+      }
+
+    });
+
+  });
 
 };
 

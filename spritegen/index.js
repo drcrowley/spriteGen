@@ -43,7 +43,10 @@ var makeSprite = function(filePath) {
             fileList.push(filePath + '/' + files[i]);
         }
 
-        spritesmith({src:fileList}, function handleResult (err, result) {
+        spritesmith({
+            src:fileList,
+            padding: 20
+        }, function handleResult (err, result) {
             if (err) {
                 throw err;
             }

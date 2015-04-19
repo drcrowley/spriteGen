@@ -3,8 +3,17 @@ extends layout
 block content
 	.container
 		h1= title
+		h3 Welcome #{user}
 		form(id="upload" enctype="multipart/form-data" action="/api/photo" method="post")
 			input(type="file" multiple name="userPhoto")
 			button(type="submit") Загрузить
 
 		img(src="/img/canvassmith.png")
+
+
+		h2 Настройки
+
+		form(id="settings" action="/api/settings" method="post")
+			input(type="text" name="padding")
+
+			button(type="submit") Сохранить
