@@ -39,9 +39,10 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 require('./libs/passport')(passport);
 require('./routes')(app, passport);
-require('./routes/errors')(app);
 
 
 require('./spritegen')(app);
+
+require('./routes/errors')(app);
 
 module.exports = app;

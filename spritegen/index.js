@@ -22,7 +22,7 @@ module.exports = function(app) {
 
     app.post('/api/photo',function(req,res){
         if(done==true){
-            res.end("File uploaded. ");
+            res.redirect('/');
         }
     });
 
@@ -48,7 +48,7 @@ var makeSprite = function(filePath) {
                 throw err;
             }
             fs.writeFileSync('./public/img/canvassmith.png', result.image, 'binary');
-            result.coordinates, result.properties; // Coordinates and properties
+            result.coordinates, result.properties;
         });
     });
 };

@@ -2,14 +2,14 @@ extends layout
 
 block content
   .container
-    h4 Login to your account
+    h1 Вход
     form(action='/login' method='post')
       .form-group
-        label(for='username') email
-        input(type='text' name='email' class="form-control" placeholder='Your email')
+        label(for='username') Логин
+        input(type='text' name='username' class="form-control")
       .form-group
-        label(for='password') Password
-        input(type='password' name='password' class="form-control" placeholder='Your Password')
-      button(type='submit') Login
+        label(for='password') Пароль
+        input(type='password' name='password' class="form-control")
+      button(type='submit').btn.btn-primary Вход
   if (message.length > 0)
     .alert.alert-danger= message

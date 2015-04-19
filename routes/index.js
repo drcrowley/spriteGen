@@ -10,12 +10,8 @@ module.exports = function(app, passport) {
     next();
   });
 
-  app.get('/', function(req, res) {
+  app.get('/', isLoggedIn, function(req, res) {
     res.render('index', { title: 'Главная'});
-  });
-
-  app.get('/about', isLoggedIn, function(req, res) {
-    res.render('about', { title: 'О сайте'});
   });
 
   app.get('/login',  function(req, res) {
@@ -59,5 +55,5 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    res.redirect('/');
+    res.redirect('/login');
 }
