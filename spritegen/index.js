@@ -5,8 +5,12 @@ var spritesmith = require('spritesmith');
 var filePath =  './uploads';
 var done = false;
 
-
 module.exports = function(app) {
+
+    app.use(function (req, res, next) {
+        next();
+    });
+
     app.use(multer({ dest: './uploads/',
         rename: function (fieldname, filename) {
             return filename+Date.now();
@@ -20,7 +24,7 @@ module.exports = function(app) {
         }
     }));
 
-    app.post('/api/photo',function(req,res){
+    app.post('/api/sprites',function(req,res){
         if(done==true){
             res.redirect('/');
         }

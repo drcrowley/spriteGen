@@ -4,8 +4,12 @@ block content
 	.container
 		h1= title
 		h3 Welcome #{user}
-		form(id="upload" enctype="multipart/form-data" action="/api/photo" method="post")
-			input(type="file" multiple name="userPhoto")
+		form(id="upload" enctype="multipart/form-data" action="/api/sprites" method="post")
+			.form-group
+				label(for='title') Заголовок
+				input(type="text" name="title").form-control
+			.form-group
+				input(type="file" multiple name="userPhoto")
 			button(type="submit") Загрузить
 
 		img(src="/img/canvassmith.png")
