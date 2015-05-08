@@ -55,39 +55,6 @@ module.exports = function(app, passport) {
 
     Settings.findOne({ 'user' :  req.user._id }, function(err, settings) {
       if (settings) {
-
-        settings.padding = req.body.padding;
-
-        settings.save(function(err) {
-          if (err)
-            throw err;
-          res.redirect('/');
-        });
-
-      } else {
-
-        var settings = new Settings({
-          user: req.user._id,
-          padding: req.body.padding
-        });
-
-        settings.save(function(err) {
-          if (err)
-            throw err;
-          res.redirect('/');
-        });
-
-      }
-
-    });
-
-  });
-
-  app.post('/api/settings', function(req, res) {
-
-    Sprites.findOne({ 'user' :  req.user._id }, function(err, sprites) {
-      if (settings) {
-
         settings.padding = req.body.padding;
 
         settings.save(function(err) {

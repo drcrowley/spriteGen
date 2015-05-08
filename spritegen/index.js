@@ -5,11 +5,15 @@ var spritesmith = require('spritesmith');
 var filePath =  './uploads';
 var done = false;
 
+var Sprites   = require('../models/sprites');
+
 module.exports = function(app) {
 
     app.use(function (req, res, next) {
         next();
     });
+
+    var fileName;
 
     app.use(multer({ dest: './uploads/',
         rename: function (fieldname, filename) {
@@ -20,13 +24,23 @@ module.exports = function(app) {
         },
         onFileUploadComplete: function (file) {
             console.log(file.fieldname + ' uploaded to  ' + file.path)
+            fileName = file.originalname;
             done=true;
         }
     }));
 
     app.post('/api/sprites',function(req,res){
         if(done==true){
-            res.redirect('/');
+            var sprites = new Sprites({
+                user: req.user._id,
+                title: req.body.title,
+                img: fileName
+            });
+
+            sprites.save(function(err) {
+              if (err) throw err;
+              res.redirect('/');
+            });
         }
     });
 
