@@ -1,30 +1,43 @@
 var multer = require('multer');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 var spritesmith = require('spritesmith');
 
-var filePath =  './uploads';
-var done = false;
+
 
 var Sprites   = require('../models/sprites');
 
 module.exports = function(app) {
 
-    app.use(function (req, res, next) {
-        next();
-    });
-
+    var filePath;
     var fileName;
+    var done = false;
 
-    app.use(multer({ dest: './uploads/',
+    app.use(multer({ dest: './public/img/',
+        changeDest: function(dest, req, res) {
+            var dest = dest + '/'+ req.user._id + '/elements/';
+            var stat = null;
+            try {
+                stat = fs.statSync(dest);
+            } catch(err) {
+                mkdirp.sync(dest);
+            }
+            if (stat && !stat.isDirectory()) {
+                throw new Error('Directory cannot be created because an inode of a different type exists at "' + dest + '"');
+            }
+            return dest;
+        },
         rename: function (fieldname, filename) {
             return filename+Date.now();
         },
         onFileUploadStart: function (file) {
-            console.log(file.originalname + ' is starting ...')
+            console.log(file.originalname + ' is starting ...');
         },
-        onFileUploadComplete: function (file) {
-            console.log(file.fieldname + ' uploaded to  ' + file.path)
+        onFileUploadComplete: function (file, req, res) {
+            console.log(file.fieldname + ' uploaded to  ' + file.path);
             fileName = file.originalname;
+            filePath = './public/img/' + req.user._id;
+            makeSprite(filePath);
             done=true;
         }
     }));
@@ -44,32 +57,33 @@ module.exports = function(app) {
         }
     });
 
-    fs.watch(filePath, function (event, filename) {
-        makeSprite(filePath);
-    });
 };
 
-
 var makeSprite = function(filePath) {
-    fs.readdir( filePath, function(err, files) {
+    fs.readdir( filePath + '/elements', function(err, files) {
         if (err) {
             throw err;
         }
         var fileList = [];
 
         for(i=0; i<files.length; i++) {
-            fileList.push(filePath + '/' + files[i]);
+            fileList.push(filePath + '/elements/' + files[i]);
         }
-
         spritesmith({
-            src:fileList,
+            src: fileList,
             padding: 20
         }, function handleResult (err, result) {
-            if (err) {
-                throw err;
+            if (err) throw err;
+            var dest = filePath + '/sprites/';
+            var stat = null;
+            try {
+                stat = fs.statSync(dest);
+            } catch(err) {
+                mkdirp.sync(dest);
             }
-            fs.writeFileSync('./public/img/canvassmith.png', result.image, 'binary');
-            result.coordinates, result.properties;
+
+            fs.writeFileSync(filePath + '/sprites/canvassmith.png', result.image, 'binary');
+            //result.coordinates, result.properties;
         });
     });
 };
