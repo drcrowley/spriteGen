@@ -82,7 +82,7 @@ var makeSprite = function(filePath) {
                 mkdirp.sync(dest);
             }
 
-            fs.writeFileSync(filePath + '/sprites/canvassmith.png', result.image, 'binary');
+            fs.writeFileSync(dest + 'canvassmith.png', result.image, 'binary');
             //result.coordinates, result.properties;
         });
     });
