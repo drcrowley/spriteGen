@@ -8,6 +8,9 @@ var SettingsSchema = new mongoose.Schema({
     },
     padding: {
         type: String
+    },
+    prefix: {
+        type: String
     }
 });
 

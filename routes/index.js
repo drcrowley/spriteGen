@@ -56,6 +56,7 @@ module.exports = function(app, passport) {
     Settings.findOne({ 'user' :  req.user._id }, function(err, settings) {
       if (settings) {
         settings.padding = req.body.padding;
+        settings.prefix = req.body.prefix;
 
         settings.save(function(err) {
           if (err)
@@ -67,7 +68,8 @@ module.exports = function(app, passport) {
 
         var settings = new Settings({
           user: req.user._id,
-          padding: req.body.padding
+          padding: req.body.padding,
+          prefix: req.body.prefix
         });
 
         settings.save(function(err) {

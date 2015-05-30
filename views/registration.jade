@@ -11,5 +11,5 @@ block content
         label(for='password') Password
         input(type='password' name='password' class="form-control")
       button(type="submit").btn.btn-primary Регистрация
-    if (message.length > 0)
-      .alert.alert-danger= message
+      if (message.length > 0)
+        .alert.alert-danger.m_t3= message

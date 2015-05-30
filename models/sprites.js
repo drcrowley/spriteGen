@@ -6,11 +6,13 @@ var SpritesSchema = new mongoose.Schema({
         type: String
     },	
     title: {
+        type: String,
+        unique: true
+    },
+    css: {
         type: String
     },
-    img: {
-        type: String
-    },
+    date: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Sprites', SpritesSchema);

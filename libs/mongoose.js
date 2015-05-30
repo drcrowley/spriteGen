@@ -11,6 +11,7 @@ module.exports = function() {
 	db.once('open', function callback () {
 	    console.log("Connected to DB!");
 	});
+
 }
 
 

@@ -2,22 +2,32 @@ extends layout
 
 block content
 	.container
-		h1= title
-		h3 Welcome #{user}
-		form(id="upload" enctype="multipart/form-data" action="/api/sprites" method="post")
-			.form-group
-				label(for='title') Заголовок
-				input(type="text" name="title").form-control
-			.form-group
-				input(type="file" multiple name="userPhoto")
-			button(type="submit") Загрузить
+		ul.nav.nav-tabs.e-tab
+			li.active
+				a(href="#upload") Загрузка
+			li
+				a(href="#settings") Настройки
+			li
+				a(href="#view") Просмотр
 
-		img(src="/img/canvassmith.png")
+		.tab-content
+			.tab-pane.fade.in.active#upload
+				form(id="upload-image" enctype="multipart/form-data" action="/api/sprites" method="post").m_t2
+					.form-group
+						label(for='title') Заголовок
+						input(type="text" name="title" required).form-control
+					.form-group
+						label(for='image') Изображения
+						input(type="file" multiple name="image").e-file
 
-
-		h2 Настройки
-
-		form(id="settings" action="/api/settings" method="post")
-			input(type="text" name="padding")
-
-			button(type="submit") Сохранить
+			.tab-pane.fade#settings
+				form(id="settings" action="/api/settings" method="post").m_t2
+					.form-group
+						label(for='padding') Отступ между элементами
+						input(type="text" name="padding").form-control
+					.form-group
+						label(for='prefix') Префикс CSS-классов
+						input(type="text" name="prefix").form-control
+					button(type="submit").btn.btn-primary Сохранить
+			.tab-pane.fade#view
+				p Просмотр

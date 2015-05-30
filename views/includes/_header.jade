@@ -1,9 +1,16 @@
 header.l-header
-    nav.navbar.navbar-inverse
+    nav.navbar.navbar-default
         .container
             .collapse.navbar-collapse
+                a(href="/").navbar-brand Генератор спрайтов
                 ul.nav.navbar-nav
-                    li(class!= route == '/' && 'active' || ''): a(href="/") Главная
-                    li(class!= route == '/registration' && 'active' || ''): a(href="/registration") Регистрация
-                    li(class!= route == '/login' && 'active' || ''): a(href="/login") Вход
-                    li: a(href="/logout") Выход
+
+                ul.nav.navbar-nav.navbar-right
+                    if(user)
+                        li
+                            a(href="/logout")
+                                |Выход
+                                span.badge.m_l1 #{user}
+                    if(!user)
+                        li(class!= route == '/registration' && 'active' || ''): a(href="/registration") Регистрация
+                        li(class!= route == '/login' && 'active' || ''): a(href="/login") Вход
