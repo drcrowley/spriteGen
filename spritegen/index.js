@@ -3,7 +3,6 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var spritesmith = require('spritesmith');
 
-var spriteTitle;
 
 var Sprites   = require('../models/sprites');
 
@@ -18,7 +17,7 @@ module.exports = function(app) {
 
     var mMulter = multer({ dest: './public/img/',
         changeDest: function(dest, req, res) {
-            var dest = dest + '/'+ req.user._id + '/elements/';
+            var dest = dest + '/'+ req.user._id + '/elements/' + req.body.title;
             var stat = null;
             try {
                 stat = fs.statSync(dest);
@@ -37,6 +36,7 @@ module.exports = function(app) {
             console.log(file.originalname + ' is starting ...');
         },
         onFileUploadComplete: function (file, req, res) {
+
             console.log(file.fieldname + ' uploaded to  ' + file.path);
             fileName = file.originalname;
             filePath = './public/img/' + req.user._id;
@@ -58,8 +58,6 @@ module.exports = function(app) {
                 title: req.body.title
             });
 
-            spriteTitle = req.body.title;
-
             sprites.save(function(err) {
               if (err) throw err;
               res.redirect('/');
@@ -70,21 +68,21 @@ module.exports = function(app) {
 };
 
 var createSprite = function(filePath, settings, req) {
-    fs.readdir( filePath + '/elements', function(err, files) {
+    fs.readdir( filePath + '/elements/' + req.body.title, function(err, files) {
         if (err) {
             throw err;
         }
         var fileList = [];
 
         for(i=0; i<files.length; i++) {
-            fileList.push(filePath + '/elements/' + files[i]);
+            fileList.push(filePath + '/elements/' + req.body.title + '/' + files[i]);
         }
         spritesmith({
             src: fileList,
             padding: (settings) ? parseInt(settings.padding) : 20
         }, function handleResult (err, result) {
             if (err) throw err;
-            var dest = filePath + '/sprites/';
+            var dest = filePath + '/sprites/' + req.body.title + '/';
             var stat = null;
             try {
                 stat = fs.statSync(dest);
@@ -100,7 +98,7 @@ var createSprite = function(filePath, settings, req) {
 };
 
 var createCss = function(coord, settings, dest, req) {
-    var prefix = settings.prefix || 'ico',
+    var prefix = (settings) ? settings.prefix : 'ico',
         css = '.'+ prefix + '{background: url(sprite.png) 0 0;}',
         className,
         bgPos = {},
@@ -130,10 +128,10 @@ var createCss = function(coord, settings, dest, req) {
         console.log("The file was created!");
     });
 
-    if(spriteTitle) {
-        Sprites.update({title: spriteTitle}, { $set: { css : css }}, function (err, css) {
-            if (err) throw err;
-        });
-    }
+
+    Sprites.update({title: req.body.title}, { $set: { css : css }}, function (err, css) {
+        if (err) throw err;
+    });
+
 
 };

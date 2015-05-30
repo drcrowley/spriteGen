@@ -2,6 +2,8 @@ var config = require('../config');
 
 var Settings   = require('../models/settings');
 
+var Sprites   = require('../models/sprites');
+
 module.exports = function(app, passport) {
 
 
@@ -15,9 +17,9 @@ module.exports = function(app, passport) {
   app.get('/', isLoggedIn, function(req, res) {
     res.render('index', {
       title: 'Главная',
-      user:  req.user.username});
+      user:  req.user.username
+    });
   });
-
 
 
   app.get('/login',  function(req, res) {
@@ -56,7 +58,6 @@ module.exports = function(app, passport) {
     Settings.findOne({ 'user' :  req.user._id }, function(err, settings) {
       if (settings) {
         settings.padding = req.body.padding;
-        settings.prefix = req.body.prefix;
 
         settings.save(function(err) {
           if (err)
@@ -80,6 +81,22 @@ module.exports = function(app, passport) {
 
       }
 
+    });
+
+  });
+
+  app.post('/api/checktitle', function(req, res) {
+
+    function check (callback) {
+      Sprites.count({title : req.body.title}, function (err, count) {
+        callback(err, count);
+      });
+    };
+
+    check(function (err, exists) {
+      if (err) throw err;
+      if (exists) res.send(false);
+      else res.send(true);
     });
 
   });
