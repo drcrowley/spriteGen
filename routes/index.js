@@ -4,6 +4,8 @@ var Settings   = require('../models/settings');
 
 var Sprites   = require('../models/sprites');
 
+var send = require('../models/send');
+
 module.exports = function(app, passport) {
 
 
@@ -15,9 +17,14 @@ module.exports = function(app, passport) {
   });
 
   app.get('/', isLoggedIn, function(req, res) {
-    res.render('index', {
-      title: 'Главная',
-      user:  req.user.username
+    send('sprites', 'user', req.user._id, function(err, data) {
+      if (err) throw err;
+        res.render('index', {
+          title: 'Главная',
+          user:  req.user.username,
+          userId: req.user._id,
+          sprites:  data
+        });
     });
   });
 

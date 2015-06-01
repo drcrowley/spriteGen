@@ -1,0 +1,6 @@
+.ico{background: url(sprite.png) 0 0;}
+.ico.ico_i_person_big {
+background-position: -0px -0px;
+width: 23px; 
+height: 24px; 
+}

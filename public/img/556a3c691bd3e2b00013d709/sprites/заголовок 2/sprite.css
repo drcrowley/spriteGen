@@ -1,0 +1,6 @@
+.icon{background: url(sprite.png) 0 0;}
+.icon.icon_i_photo {
+background-position: -0px -0px;
+width: 21px; 
+height: 15px; 
+}

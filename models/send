@@ -1,0 +1,7 @@
+var mongoose = require('mongoose');
+
+module.exports = function(col, field, value, cb) {
+    var db = mongoose.connection;
+    var collection = db.collection(col);
+    collection.find({}).toArray(cb);
+}

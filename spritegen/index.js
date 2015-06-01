@@ -12,8 +12,6 @@ module.exports = function(app) {
 
     var filePath;
     var fileName;
-    var done = false;
-
 
     var mMulter = multer({ dest: './public/img/',
         changeDest: function(dest, req, res) {
@@ -48,7 +46,6 @@ module.exports = function(app) {
 
         }
     });
-
 
 
     app.post('/api/sprites', mMulter, function(req,res){

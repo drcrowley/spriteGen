@@ -30,4 +30,19 @@ block content
 						input(type="text" name="prefix").form-control
 					button(type="submit").btn.btn-primary Сохранить
 			.tab-pane.fade#view
-				p Просмотр
+				.row.m_t3
+					each sprite in sprites
+						if(userId == sprite.user)
+							.col-sm-6.col-md-4
+								.thumbnail
+									img(src="img/#{userId}/sprites/#{sprite.title}/sprite.png").m_t2
+									.caption
+										h3= sprite.title
+										p
+											a(href="#" class="btn btn-default")
+												i.glyphicon.glyphicon-download-alt
+											a(href="#" class="btn btn-primary").m_l1
+												i.glyphicon.glyphicon-pencil
+											a(href="#" class="btn btn-danger").m_l1
+												i.glyphicon.glyphicon-remove
+
