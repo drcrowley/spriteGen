@@ -4,8 +4,6 @@ var Settings   = require('../models/settings');
 
 var Sprites   = require('../models/sprites');
 
-var send = require('../models/send');
-
 module.exports = function(app, passport) {
 
 
@@ -19,6 +17,7 @@ module.exports = function(app, passport) {
   app.get('/', isLoggedIn, function(req, res) {
     Sprites.find({ user: req.user._id }, function (err, sprites) {
       if (err) throw err;
+
       res.render('index', {
         title: 'Главная',
         user:  req.user.username,
@@ -60,7 +59,6 @@ module.exports = function(app, passport) {
   }));
 
   app.post('/api/settings', function(req, res) {
-
     Settings.findOne({ 'user' :  req.user._id }, function(err, settings) {
       if (settings) {
         settings.padding = req.body.padding;
@@ -86,13 +84,11 @@ module.exports = function(app, passport) {
         });
 
       }
-
     });
 
   });
 
   app.post('/api/checktitle', function(req, res) {
-
     function check (callback) {
       Sprites.count({title : req.body.title}, function (err, count) {
         callback(err, count);
@@ -104,9 +100,7 @@ module.exports = function(app, passport) {
       if (exists) res.send(false);
       else res.send(true);
     });
-
   });
-
 
 };
 

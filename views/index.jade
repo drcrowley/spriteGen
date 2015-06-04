@@ -29,20 +29,28 @@ block content
 						input(type="text" name="prefix").form-control
 					button(type="submit").btn.btn-primary Сохранить
 			.tab-pane.fade#view
-				.row.m_t3
+				.b-sprites.row.m_t3
 					if (!sprites.length)
 						p Спрайты не загружены
-					each sprite in sprites
-						.col-sm-6.col-md-4
-							.thumbnail
-								img(src="img/#{userId}/sprites/#{sprite.title}/sprite.png").m_t2
-								.caption
-									h3= sprite.title
-									p
-										a(href="#" class="btn btn-default")
-											i.glyphicon.glyphicon-download-alt
-										a(href="#" class="btn btn-primary").m_l1
-											i.glyphicon.glyphicon-pencil
-										a(href="#" class="btn btn-danger").m_l1
-											i.glyphicon.glyphicon-remove
-
+					//- each sprite in sprites
+					-for(i=0; i<sprites.length; i++)
+						.col-md-4
+							.b-sprites__item
+								.thumbnail
+									img(src="img/#{userId}/sprites/#{sprites[i].title}/sprite.png").m_t2
+									.clearfix.m_t2
+										.b-sprites__item__title.pull-left
+											strong= sprites[i].title
+										.btn-group.pull-right
+											a(href="img/#{userId}/sprites/#{sprites[i].title}/sprite.zip").btn.btn-default
+												i.glyphicon.glyphicon-download-alt
+											a(href="#").btn.btn-primary
+												i.glyphicon.glyphicon-pencil
+											a(href="#").btn.btn-primary.btn-danger
+												i.glyphicon.glyphicon-remove										
+								.panel.panel-default
+										.panel-heading
+											.panel-title 
+												a(href="#collapse-#{i}" data-toggle="collapse") Показать CSS-код		
+										.panel-collapse.collapse(id="collapse-#{i}")
+											pre.prettyprint.lang-css= sprites[i].css

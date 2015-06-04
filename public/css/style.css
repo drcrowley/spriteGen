@@ -1,3 +1,15 @@
+.b-sprites .b-sprites__item {
+
+}
+.b-sprites__item .thumbnail {
+	padding: 5px 15px;
+	margin-bottom: 0;
+}
+.b-sprites .b-sprites__item__title {
+	padding: 9px 0;
+	font-size: 16px;
+}
+
 .m_t05 {
 	margin-top: 5px;
 }
@@ -99,4 +111,12 @@
 }
 .m_b6 {
 	margin-bottom: 60px;
+}
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
 }

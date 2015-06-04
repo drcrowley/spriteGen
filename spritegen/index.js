@@ -2,6 +2,7 @@ var multer = require('multer');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var spritesmith = require('spritesmith');
+var zip = require("node-native-zip");
 
 var Sprites   = require('../models/sprites');
 
@@ -42,7 +43,6 @@ module.exports = function(app) {
                 if (err) throw err;
                 createSprite(filePath, settings, req);
             });
-
         }
     });
 
@@ -95,7 +95,7 @@ var createSprite = function(filePath, settings, req) {
 
 var createCss = function(coord, settings, dest, req) {
     var prefix = (settings) ? settings.prefix : 'ico',
-        css = '.'+ prefix + '{background: url(sprite.png) 0 0;}',
+        css = '.'+ prefix + ' {background: url(sprite.png) 0 0;}',
         className,
         bgPos = {},
         width,
@@ -103,9 +103,9 @@ var createCss = function(coord, settings, dest, req) {
         cssItem,
         cssTemplate =
                 '\n.'+ prefix +'.'+ prefix +'_{className} {\n' +
-                'background-position: -{x}px -{y}px;\n' +
-                'width: {width}px; \n'+
-                'height: {height}px; \n'+
+                '\tbackground-position: -{x}px -{y}px;\n' +
+                '\twidth: {width}px; \n'+
+                '\theight: {height}px; \n'+
                 '}';
 
     for (i in coord) {
@@ -124,10 +124,26 @@ var createCss = function(coord, settings, dest, req) {
         console.log("The file was created!");
     });
 
-
     Sprites.update({title: req.body.title}, { $set: { css : css }}, function (err, css) {
         if (err) throw err;
     });
 
+    createZip(dest, req);
+};
 
+var createZip = function(dest, req) {
+    var archive = new zip();
+
+    archive.addFiles([ 
+        { name: "sprite.css", path: dest + "/sprite.css" },
+        { name: "sprite.png", path: dest + "/sprite.png" }
+    ], function (err) {
+        if (err) return console.log("err while adding files", err);
+
+        var buff = archive.toBuffer();
+
+        fs.writeFile(dest + "/sprite.zip", buff, function () {
+            console.log("Finished");
+        });
+    });
 };

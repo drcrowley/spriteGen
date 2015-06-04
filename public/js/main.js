@@ -4,6 +4,8 @@
 
 	$(document).ready(function () {
 
+		prettyPrint();
+
 		$('.e-tab a').click(function (e) {
 			e.preventDefault()
 			$(this).tab('show')
@@ -14,6 +16,8 @@
 			language: "ru",
 			allowedFileTypes: ["image"],
 		});
+
+		$('.e-collapse').collapse();
 
 		$("form").validate({
 			errorClass: "alert alert-danger",
