@@ -3,7 +3,6 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var spritesmith = require('spritesmith');
 
-
 var Sprites   = require('../models/sprites');
 
 var Settings   = require('../models/settings');

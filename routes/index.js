@@ -17,17 +17,16 @@ module.exports = function(app, passport) {
   });
 
   app.get('/', isLoggedIn, function(req, res) {
-    send('sprites', 'user', req.user._id, function(err, data) {
+    Sprites.find({ user: req.user._id }, function (err, sprites) {
       if (err) throw err;
-        res.render('index', {
-          title: 'Главная',
-          user:  req.user.username,
-          userId: req.user._id,
-          sprites:  data
-        });
+      res.render('index', {
+        title: 'Главная',
+        user:  req.user.username,
+        userId: req.user._id,
+        sprites:  sprites
+      });
     });
   });
-
 
   app.get('/login',  function(req, res) {
     res.render('login', {

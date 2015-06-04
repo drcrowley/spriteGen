@@ -19,6 +19,7 @@
     "morgan": "~1.5.1",
     "multer": "^0.1.8",
     "nconf": "^0.7.1",
+    "node-native-zip": "^1.1.0",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
     "serve-favicon": "~2.2.0",

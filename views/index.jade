@@ -19,7 +19,6 @@ block content
 					.form-group
 						label(for='image') Изображения
 						input(type="file" multiple name="image").e-file
-
 			.tab-pane.fade#settings
 				form(id="settings" action="/api/settings" method="post").m_t2
 					.form-group
@@ -31,18 +30,19 @@ block content
 					button(type="submit").btn.btn-primary Сохранить
 			.tab-pane.fade#view
 				.row.m_t3
+					if (!sprites.length)
+						p Спрайты не загружены
 					each sprite in sprites
-						if(userId == sprite.user)
-							.col-sm-6.col-md-4
-								.thumbnail
-									img(src="img/#{userId}/sprites/#{sprite.title}/sprite.png").m_t2
-									.caption
-										h3= sprite.title
-										p
-											a(href="#" class="btn btn-default")
-												i.glyphicon.glyphicon-download-alt
-											a(href="#" class="btn btn-primary").m_l1
-												i.glyphicon.glyphicon-pencil
-											a(href="#" class="btn btn-danger").m_l1
-												i.glyphicon.glyphicon-remove
+						.col-sm-6.col-md-4
+							.thumbnail
+								img(src="img/#{userId}/sprites/#{sprite.title}/sprite.png").m_t2
+								.caption
+									h3= sprite.title
+									p
+										a(href="#" class="btn btn-default")
+											i.glyphicon.glyphicon-download-alt
+										a(href="#" class="btn btn-primary").m_l1
+											i.glyphicon.glyphicon-pencil
+										a(href="#" class="btn btn-danger").m_l1
+											i.glyphicon.glyphicon-remove
 

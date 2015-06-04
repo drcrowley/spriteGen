@@ -1,0 +1,21 @@
+.ico{background: url(sprite.png) 0 0;}
+.ico.ico_i_mark_blue_big {
+background-position: -0px -0px;
+width: 45px; 
+height: 57px; 
+}
+.ico.ico_i_mark_green_big {
+background-position: -0px -77px;
+width: 45px; 
+height: 56px; 
+}
+.ico.ico_i_mark_orange_big {
+background-position: -65px -0px;
+width: 45px; 
+height: 57px; 
+}
+.ico.ico_i_mark_red_big {
+background-position: -130px -0px;
+width: 45px; 
+height: 57px; 
+}
