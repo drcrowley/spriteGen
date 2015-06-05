@@ -32,8 +32,7 @@ block content
 				.b-sprites.row.m_t3
 					if (!sprites.length)
 						p Спрайты не загружены
-					//- each sprite in sprites
-					-for(i=0; i<sprites.length; i++)
+					each val, i in sprites
 						.col-md-4
 							.b-sprites__item
 								.thumbnail
@@ -46,11 +45,25 @@ block content
 												i.glyphicon.glyphicon-download-alt
 											a(href="#").btn.btn-primary
 												i.glyphicon.glyphicon-pencil
-											a(href="#").btn.btn-primary.btn-danger
+											a(href="/api/sprites/#{sprites[i]._id}").btn.btn-primary.btn-danger.e-sprite-del
 												i.glyphicon.glyphicon-remove										
 								.panel.panel-default
 										.panel-heading
 											.panel-title 
-												a(href="#collapse-#{i}" data-toggle="collapse") Показать CSS-код		
+												a(href="#collapse-#{i}" data-toggle="collapse") Показать CSS-код
 										.panel-collapse.collapse(id="collapse-#{i}")
 											pre.prettyprint.lang-css= sprites[i].css
+				script.
+					$(function() {
+						$('.e-sprite-del').on('click', function(event) {
+							event.preventDefault();
+							var url = $(this).attr('href');
+							$(this).closest('.col-md-4').fadeOut(150, function() {
+								$(this).remove();
+							})
+							$.ajax({
+							   	url:url,
+							    type: 'DELETE',
+							});							
+						})
+					});

@@ -1,7 +1,7 @@
 var config = require('../config');
+var fs = require('fs');
 
 var Settings   = require('../models/settings');
-
 var Sprites   = require('../models/sprites');
 
 module.exports = function(app, passport) {
@@ -17,12 +17,11 @@ module.exports = function(app, passport) {
   app.get('/', isLoggedIn, function(req, res) {
     Sprites.find({ user: req.user._id }, function (err, sprites) {
       if (err) throw err;
-
       res.render('index', {
         title: 'Главная',
         user:  req.user.username,
         userId: req.user._id,
-        sprites:  sprites
+        sprites: sprites
       });
     });
   });
@@ -57,6 +56,28 @@ module.exports = function(app, passport) {
     failureRedirect : '/login', // redirect back to the signup page if there is an error
     failureFlash : true // allow flash messages
   }));
+
+  app.delete('/api/sprites/:id', function (req, res){
+    return Sprites.findById(req.params.id, function (err, sprites) {
+        if (err) throw err;
+        if(!sprites) {
+            res.statusCode = 404;
+            return res.send({ error: 'Not found' });
+        }
+        return sprites.remove(function (err) {
+            if (!err) {
+                deleteFolderRecursive('public/img/' + req.user._id + '/sprites/' + sprites.title)
+                deleteFolderRecursive('public/img/' + req.user._id + '/elements/' + sprites.title)
+                console.log("sprite removed");
+                return res.send({ status: 'OK' });
+            } else {
+                res.statusCode = 500;
+                console.log('Internal error(%d): %s',res.statusCode,err.message);
+                return res.send({ error: 'Server error' });
+            }
+        });
+    });
+  });
 
   app.post('/api/settings', function(req, res) {
     Settings.findOne({ 'user' :  req.user._id }, function(err, settings) {
@@ -111,4 +132,18 @@ function isLoggedIn(req, res, next) {
 
     // if they aren't redirect them to the home page
     res.redirect('/login');
-}
+};
+
+function deleteFolderRecursive(path) {
+  if( fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file,index){
+      var curPath = path + "/" + file;
+      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+};
