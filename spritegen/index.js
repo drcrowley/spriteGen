@@ -32,6 +32,7 @@ var spriteGen = {
                     }
                 }),
     delElements: function(req, res) {
+        console.log(req.params.id);
         for(i=0; req.body.elements.length; i++) {
             console.log(req.body.elements[i].name);
         }

@@ -62,7 +62,7 @@ block content
 							span &times;
 						h4.modal-title= sprites[i].title
 					.modal-body
-						form(enctype="multipart/form-data" action="/api/sprites/#{sprites[i]._id}" method="POST").e-elements-del
+						form(enctype="multipart/form-data" action="/api/sprites/#{sprites[i]._id}" method="").e-elements-del
 							each el, j in sprites[i].elements
 								div
 									img(src="img/#{userId}/elements/#{sprites[i]._id}/#{sprites[i].elements[j]}")
