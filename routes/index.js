@@ -67,9 +67,14 @@ module.exports = function(app, passport) {
 
       sprites.save(function(err) {
         if (err) throw err;
+        spriteGen.createSprite(req, sprites);
         res.redirect('/');
       });
-  });  
+  });
+
+  app.post('/api/edit', spriteGen.addElements, function(req,res){
+    spriteGen.createSprite(req);
+  });
 
   app.delete('/api/sprites/:id', function (req, res){
     spriteGen.delSprite(req, res);

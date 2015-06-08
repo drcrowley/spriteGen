@@ -12,7 +12,7 @@ var Settings   = require('../models/settings');
 var spriteGen = {
     addElements: multer({ dest: './public/img/',
                     changeDest: function(dest, req, res) {
-                        var dest = dest + '/'+ req.user._id + '/elements/' + req.body.title;
+                        var dest = dest + '/'+ req.user._id + '/elements/temp';
                         var stat = null;
                         try {
                             stat = fs.statSync(dest);
@@ -28,10 +28,44 @@ var spriteGen = {
                         return Date.now()+filename;
                     },
                     onFileUploadComplete: function (file, req, res) {
-                        var filePath = './public/img/' + req.user._id;
-                        getSettings(filePath, req);
+                        console.log('Upload complete');
                     }
                 }),
+    createSprite: function(req, sprites) {
+        var userPath = './public/img/' + req.user._id;
+        var filePath = userPath + '/elements/' + sprites._id;
+
+        fs.renameSync(userPath + '/elements/temp', filePath);
+
+        Settings.findOne( {user: req.user._id}, function(err, settings) {
+            if (err) throw err;
+
+            fs.readdir( filePath, function(err, files) {
+                if (err) throw err;
+
+                var fileList = [];
+
+                for(i=0; i<files.length; i++) {
+                    fileList.push(filePath + '/' + files[i]);
+                }
+                spritesmith({
+                    src: fileList,
+                    padding: (settings) ? parseInt(settings.padding) : 20
+                }, function handleResult (err, result) {
+                    if (err) throw err;
+                    var dest = userPath + '/sprites/' + sprites._id + '/';
+                    var stat = null;
+                    try {
+                        stat = fs.statSync(dest);
+                    } catch(err) {
+                        mkdirp.sync(dest);
+                    }
+                    fs.writeFileSync(dest + 'sprite.png', result.image, 'binary');
+                    createCss(result.coordinates, settings, dest, sprites);
+                });
+            });            
+        });
+    },
     delSprite: function(req, res) {
         return Sprites.findById(req.params.id, function (err, sprites) {
             if (err) throw err;
@@ -41,8 +75,8 @@ var spriteGen = {
             }
             return sprites.remove(function (err) {
                 if (!err) {
-                    deleteFolderRecursive('public/img/' + req.user._id + '/sprites/' + sprites.title)
-                    deleteFolderRecursive('public/img/' + req.user._id + '/elements/' + sprites.title)
+                    deleteFolderRecursive('public/img/' + req.user._id + '/sprites/' + sprites._id)
+                    deleteFolderRecursive('public/img/' + req.user._id + '/elements/' + sprites._id)
                     console.log("sprite removed");
                     return res.send({ status: 'OK' });
                 } else {
@@ -58,41 +92,8 @@ var spriteGen = {
 
 module.exports = spriteGen;
 
-var getSettings = function(filePath, req) {
-    Settings.findOne( {user: req.user._id}, function(err, settings) {
-        if (err) throw err;
-        createSprite(filePath, settings, req);
-    });
-}
 
-var createSprite = function(filePath, settings, req) {
-    fs.readdir( filePath + '/elements/' + req.body.title, function(err, files) {
-        if (err) throw err;
-
-        var fileList = [];
-
-        for(i=0; i<files.length; i++) {
-            fileList.push(filePath + '/elements/' + req.body.title + '/' + files[i]);
-        }
-        spritesmith({
-            src: fileList,
-            padding: (settings) ? parseInt(settings.padding) : 20
-        }, function handleResult (err, result) {
-            if (err) throw err;
-            var dest = filePath + '/sprites/' + req.body.title + '/';
-            var stat = null;
-            try {
-                stat = fs.statSync(dest);
-            } catch(err) {
-                mkdirp.sync(dest);
-            }
-            fs.writeFileSync(dest + 'sprite.png', result.image, 'binary');
-            createCss(result.coordinates, settings, dest, req);
-        });
-    });
-};
-
-var createCss = function(coord, settings, dest, req) {
+var createCss = function(coord, settings, dest, sprites) {
     var prefix = (settings) ? settings.prefix : 'ico',
         css = '.'+ prefix + ' {background: url(sprite.png) 0 0;}',
         className,
@@ -125,13 +126,13 @@ var createCss = function(coord, settings, dest, req) {
         console.log("The file was created!");
     });
 
-    Sprites.update({title: req.body.title}, { $set: { css : css, elements : fileListName }}, function (err, css) {
+    Sprites.update({_id: sprites._id}, { $set: { css : css, elements : fileListName }}, function (err, css) {
         if (err) throw err;
     });
-    createZip(dest, req);
+    createZip(dest);
 };
 
-var createZip = function(dest, req) {
+var createZip = function(dest) {
     var archive = new zip();
 
     archive.addFiles([ 

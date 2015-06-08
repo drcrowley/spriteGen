@@ -36,7 +36,7 @@ block content
 						.col-md-4
 							.b-sprites__item
 								.thumbnail
-									img(src="img/#{userId}/sprites/#{sprites[i].title}/sprite.png").m_t2
+									img(src="img/#{userId}/sprites/#{sprites[i]._id}/sprite.png").m_t2
 									.clearfix.m_t2
 										.b-sprites__item__title.pull-left
 											strong= sprites[i].title
@@ -46,27 +46,13 @@ block content
 											a(href="#" data-toggle="modal" data-target="#modal-#{i}").btn.btn-primary
 												i.glyphicon.glyphicon-pencil
 											a(href="/api/sprites/#{sprites[i]._id}").btn.btn-primary.btn-danger.e-sprite-del
-												i.glyphicon.glyphicon-remove										
+												i.glyphicon.glyphicon-remove
 								.panel.panel-default
 										.panel-heading
 											.panel-title 
 												a(href="#collapse-#{i}" data-toggle="collapse") Показать CSS-код
 										.panel-collapse.collapse(id="collapse-#{i}")
 											pre.prettyprint.lang-css= sprites[i].css
-				script.
-					$(function() {
-						$('.e-sprite-del').on('click', function(event) {
-							event.preventDefault();
-							var url = $(this).attr('href');
-							$(this).closest('.col-md-4').fadeOut(150, function() {
-								$(this).remove();
-							})
-							$.ajax({
-							   	url:url,
-							    type: 'DELETE',
-							});
-						})
-					});
 	each sprite, i in sprites
 		.modal.fade(id="modal-#{i}")
 			.modal-dialog
@@ -77,4 +63,22 @@ block content
 						h4.modal-title= sprites[i].title
 					.modal-body
 						each el, j in sprites[i].elements
-							img(src="img/#{userId}/elements/#{sprites[i].title}/#{sprites[i].elements[j]}")
+							img(src="img/#{userId}/elements/#{sprites[i]._id}/#{sprites[i].elements[j]}")
+						//- form(enctype="multipart/form-data" action="/api/edit/#{sprites[i]._id}" method="post")
+						//- 	.form-group
+						//- 		label(for='image') Изображения
+						//- 		input(type="file" multiple name="image").e-file
+	script.
+		$(function() {
+			$('.e-sprite-del').on('click', function(event) {
+				event.preventDefault();
+				var url = $(this).attr('href');
+				$(this).closest('.col-md-4').fadeOut(150, function() {
+					$(this).remove();
+				})
+				$.ajax({
+				   	url:url,
+				    type: 'DELETE',
+				});
+			})
+		});
