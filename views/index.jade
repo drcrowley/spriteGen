@@ -41,7 +41,7 @@ block content
 										.b-sprites__item__title.pull-left
 											strong= sprites[i].title
 										.btn-group.pull-right
-											a(href="img/#{userId}/sprites/#{sprites[i].title}/sprite.zip").btn.btn-default
+											a(href="img/#{userId}/sprites/#{sprites[i]._id}/sprite.zip").btn.btn-default
 												i.glyphicon.glyphicon-download-alt
 											a(href="#" data-toggle="modal" data-target="#modal-#{i}").btn.btn-primary
 												i.glyphicon.glyphicon-pencil
@@ -62,8 +62,12 @@ block content
 							span &times;
 						h4.modal-title= sprites[i].title
 					.modal-body
-						each el, j in sprites[i].elements
-							img(src="img/#{userId}/elements/#{sprites[i]._id}/#{sprites[i].elements[j]}")
+						form(enctype="multipart/form-data" action="/api/sprites/#{sprites[i]._id}" method="POST").e-elements-del
+							each el, j in sprites[i].elements
+								div
+									img(src="img/#{userId}/elements/#{sprites[i]._id}/#{sprites[i].elements[j]}")
+									input(type="checkbox" name="#{sprites[i].elements[j]}")
+							button.button(type="submit") Удалить
 						//- form(enctype="multipart/form-data" action="/api/edit/#{sprites[i]._id}" method="post")
 						//- 	.form-group
 						//- 		label(for='image') Изображения
@@ -80,5 +84,16 @@ block content
 				   	url:url,
 				    type: 'DELETE',
 				});
-			})
+			});
+			$('.e-elements-del').on('submit', function(event) {
+				event.preventDefault();
+				console.log(JSON.stringify($(this).serializeArray()));
+				$.ajax( {
+					type: 'DELETE',
+					json: true,
+					url: $(this).attr('action'),
+					'Content-Type': 'application/x-www-form-urlencoded',
+					data: {elements: $(this).serializeArray()},
+				});
+			});
 		});

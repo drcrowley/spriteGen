@@ -1,0 +1,11 @@
+.iconka {background: url(sprite.png) 0 0;}
+.iconka.iconka_i_top {
+	background-position: -0px -0px;
+	width: 21px; 
+	height: 25px; 
+}
+.iconka.iconka_i_top_hover {
+	background-position: -31px -0px;
+	width: 21px; 
+	height: 25px; 
+}

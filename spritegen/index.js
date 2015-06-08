@@ -31,11 +31,21 @@ var spriteGen = {
                         console.log('Upload complete');
                     }
                 }),
-    createSprite: function(req, sprites) {
+    delElements: function(req, res) {
+        for(i=0; req.body.elements.length; i++) {
+            console.log(req.body.elements[i].name);
+        }
+    },
+    createSprite: function(req, res, spriteId) {
         var userPath = './public/img/' + req.user._id;
-        var filePath = userPath + '/elements/' + sprites._id;
-
-        fs.renameSync(userPath + '/elements/temp', filePath);
+        var filePath = userPath + '/elements/' + spriteId;
+        var stat = null;
+        try {
+            stat = fs.statSync(userPath + '/elements/temp');
+            if (stat.isDirectory()) {
+                fs.renameSync(userPath + '/elements/temp', filePath);
+            }
+        }   catch(err) {}
 
         Settings.findOne( {user: req.user._id}, function(err, settings) {
             if (err) throw err;
@@ -53,7 +63,7 @@ var spriteGen = {
                     padding: (settings) ? parseInt(settings.padding) : 20
                 }, function handleResult (err, result) {
                     if (err) throw err;
-                    var dest = userPath + '/sprites/' + sprites._id + '/';
+                    var dest = userPath + '/sprites/' + spriteId + '/';
                     var stat = null;
                     try {
                         stat = fs.statSync(dest);
@@ -61,7 +71,7 @@ var spriteGen = {
                         mkdirp.sync(dest);
                     }
                     fs.writeFileSync(dest + 'sprite.png', result.image, 'binary');
-                    createCss(result.coordinates, settings, dest, sprites);
+                    createCss(result.coordinates, settings, dest, spriteId, res);
                 });
             });            
         });
@@ -93,7 +103,7 @@ var spriteGen = {
 module.exports = spriteGen;
 
 
-var createCss = function(coord, settings, dest, sprites) {
+var createCss = function(coord, settings, dest, spriteId, res) {
     var prefix = (settings) ? settings.prefix : 'ico',
         css = '.'+ prefix + ' {background: url(sprite.png) 0 0;}',
         className,
@@ -126,8 +136,9 @@ var createCss = function(coord, settings, dest, sprites) {
         console.log("The file was created!");
     });
 
-    Sprites.update({_id: sprites._id}, { $set: { css : css, elements : fileListName }}, function (err, css) {
+    Sprites.update({_id: spriteId}, { $set: { css : css, elements : fileListName }}, function (err, css) {
         if (err) throw err;
+        res.redirect('/');
     });
     createZip(dest);
 };

@@ -67,28 +67,31 @@ module.exports = function(app, passport) {
 
       sprites.save(function(err) {
         if (err) throw err;
-        spriteGen.createSprite(req, sprites);
-        res.redirect('/');
+        spriteGen.createSprite(req, res, sprites._id);
       });
   });
 
-  app.post('/api/edit', spriteGen.addElements, function(req,res){
-    spriteGen.createSprite(req);
-  });
+  // app.post('/api/edit', spriteGen.addElements, function(req,res){
+  //   spriteGen.createSprite(req);
+  // });
 
   app.delete('/api/sprites/:id', function (req, res){
-    spriteGen.delSprite(req, res);
+    spriteGen.delElements(req, res);
   });
 
   app.post('/api/settings', function(req, res) {
     Settings.findOne({ 'user' :  req.user._id }, function(err, settings) {
       if (settings) {
         settings.padding = req.body.padding;
-
+        settings.prefix = req.body.prefix;
         settings.save(function(err) {
-          if (err)
-            throw err;
-          res.redirect('/');
+          if (err) throw err;      
+          Sprites.find({}, function(err, sprites) {
+              if (err) throw err;
+              for(i=0; i<sprites.length-1; i++) {
+                spriteGen.createSprite(req, res, sprites[i]._id);
+              };
+          });
         });
       } else {
         var settings = new Settings({
@@ -96,11 +99,14 @@ module.exports = function(app, passport) {
           padding: req.body.padding,
           prefix: req.body.prefix
         });
-
         settings.save(function(err) {
-          if (err)
-            throw err;
-          res.redirect('/');
+          if (err) throw err;
+          Sprites.find({}, function(err, sprites) {
+              if (err) throw err;
+              for(i=0; i<sprites.length-1; i++) {
+                spriteGen.createSprite(req, res, sprites[i]._id);
+              };
+          });      
         });
       }
     });
