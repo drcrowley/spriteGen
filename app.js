@@ -41,7 +41,7 @@ require('./libs/passport')(passport);
 require('./routes')(app, passport);
 
 
-require('./spritegen')(app);
+require('./spritegen');
 
 require('./routes/errors')(app);
 

@@ -8,47 +8,55 @@ var Sprites   = require('../models/sprites');
 
 var Settings   = require('../models/settings');
 
-module.exports = function(app) {
 
-    var filePath;
-
-    var mMulter = multer({ dest: './public/img/',
-        changeDest: function(dest, req, res) {
-            var dest = dest + '/'+ req.user._id + '/elements/' + req.body.title;
-            var stat = null;
-            try {
-                stat = fs.statSync(dest);
-            } catch(err) {
-                mkdirp.sync(dest);
+var spriteGen = {
+    addElements: multer({ dest: './public/img/',
+                    changeDest: function(dest, req, res) {
+                        var dest = dest + '/'+ req.user._id + '/elements/' + req.body.title;
+                        var stat = null;
+                        try {
+                            stat = fs.statSync(dest);
+                        } catch(err) {
+                            mkdirp.sync(dest);
+                        }
+                        if (stat && !stat.isDirectory()) {
+                            throw new Error('Директория не может быть создана');
+                        }
+                        return dest;
+                    },
+                    rename: function (fieldname, filename) {
+                        return Date.now()+filename;
+                    },
+                    onFileUploadComplete: function (file, req, res) {
+                        var filePath = './public/img/' + req.user._id;
+                        getSettings(filePath, req);
+                    }
+                }),
+    delSprite: function(req, res) {
+        return Sprites.findById(req.params.id, function (err, sprites) {
+            if (err) throw err;
+            if(!sprites) {
+                res.statusCode = 404;
+                return res.send({ error: 'Not found' });
             }
-            if (stat && !stat.isDirectory()) {
-                throw new Error('Директория не может быть создана');
-            }
-            return dest;
-        },
-        rename: function (fieldname, filename) {
-            return Date.now()+filename;
-        },
-        onFileUploadComplete: function (file, req, res) {
-            filePath = './public/img/' + req.user._id;
-            getSettings(filePath, req);
-        }
-    });
-
-
-    app.post('/api/sprites', mMulter, function(req,res){
-        var sprites = new Sprites({
-            user: req.user._id,
-            title: req.body.title
+            return sprites.remove(function (err) {
+                if (!err) {
+                    deleteFolderRecursive('public/img/' + req.user._id + '/sprites/' + sprites.title)
+                    deleteFolderRecursive('public/img/' + req.user._id + '/elements/' + sprites.title)
+                    console.log("sprite removed");
+                    return res.send({ status: 'OK' });
+                } else {
+                    res.statusCode = 500;
+                    console.log('Internal error(%d): %s',res.statusCode,err.message);
+                    return res.send({ error: 'Server error' });
+                }
+            });
         });
-
-        sprites.save(function(err) {
-          if (err) throw err;
-          res.redirect('/');
-        });
-    });
-
+    },
 };
+
+
+module.exports = spriteGen;
 
 var getSettings = function(filePath, req) {
     Settings.findOne( {user: req.user._id}, function(err, settings) {
@@ -80,16 +88,6 @@ var createSprite = function(filePath, settings, req) {
             }
             fs.writeFileSync(dest + 'sprite.png', result.image, 'binary');
             createCss(result.coordinates, settings, dest, req);
-            var fileListName = []; 
-            for (i in fileList) {
-                var fileName = fileList[i].split('/');
-                fileName = fileName[fileName.length-1];
-                fileListName.push(fileName);
-            }
-            console.log(fileListName);
-            Sprites.update({title: req.body.title}, { $set: { elements : fileListName }}, function (err, elements) {
-                if (err) throw err;
-            });
         });
     });
 };
@@ -98,6 +96,7 @@ var createCss = function(coord, settings, dest, req) {
     var prefix = (settings) ? settings.prefix : 'ico',
         css = '.'+ prefix + ' {background: url(sprite.png) 0 0;}',
         className,
+        fileListName = [],
         bgPos = {},
         width,
         height,
@@ -110,7 +109,9 @@ var createCss = function(coord, settings, dest, req) {
                 '}';
     for (i in coord) {
         className = i.split('/');
-        className = className[className.length-1].replace(new RegExp("\.(gif|jpg|jpeg|tiff|png)$",'g'), '').replace(new RegExp("^[0-9]+",'g'), '');
+        className = className[className.length-1];
+        fileListName.push(className);
+        className = className.replace(new RegExp("\.(gif|jpg|jpeg|tiff|png)$",'g'), '').replace(new RegExp("^[0-9]+",'g'), '');
         bgPos.x = coord[i].x;
         bgPos.y = coord[i].y;
         width = coord[i].width;
@@ -124,10 +125,9 @@ var createCss = function(coord, settings, dest, req) {
         console.log("The file was created!");
     });
 
-    Sprites.update({title: req.body.title}, { $set: { css : css }}, function (err, css) {
+    Sprites.update({title: req.body.title}, { $set: { css : css, elements : fileListName }}, function (err, css) {
         if (err) throw err;
     });
-
     createZip(dest, req);
 };
 
@@ -146,4 +146,18 @@ var createZip = function(dest, req) {
             console.log("Finished");
         });
     });
+};
+
+var deleteFolderRecursive = function(path) {
+  if( fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file,index){
+      var curPath = path + "/" + file;
+      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
 };

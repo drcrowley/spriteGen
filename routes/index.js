@@ -4,6 +4,8 @@ var fs = require('fs');
 var Settings   = require('../models/settings');
 var Sprites   = require('../models/sprites');
 
+var spriteGen   = require('../spritegen');
+
 module.exports = function(app, passport) {
 
 
@@ -57,26 +59,20 @@ module.exports = function(app, passport) {
     failureFlash : true // allow flash messages
   }));
 
-  app.delete('/api/sprites/:id', function (req, res){
-    return Sprites.findById(req.params.id, function (err, sprites) {
+  app.post('/api/sprites', spriteGen.addElements, function(req,res){
+      var sprites = new Sprites({
+          user: req.user._id,
+          title: req.body.title
+      });
+
+      sprites.save(function(err) {
         if (err) throw err;
-        if(!sprites) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
-        }
-        return sprites.remove(function (err) {
-            if (!err) {
-                deleteFolderRecursive('public/img/' + req.user._id + '/sprites/' + sprites.title)
-                deleteFolderRecursive('public/img/' + req.user._id + '/elements/' + sprites.title)
-                console.log("sprite removed");
-                return res.send({ status: 'OK' });
-            } else {
-                res.statusCode = 500;
-                console.log('Internal error(%d): %s',res.statusCode,err.message);
-                return res.send({ error: 'Server error' });
-            }
-        });
-    });
+        res.redirect('/');
+      });
+  });  
+
+  app.delete('/api/sprites/:id', function (req, res){
+    spriteGen.delSprite(req, res);
   });
 
   app.post('/api/settings', function(req, res) {
@@ -89,9 +85,7 @@ module.exports = function(app, passport) {
             throw err;
           res.redirect('/');
         });
-
       } else {
-
         var settings = new Settings({
           user: req.user._id,
           padding: req.body.padding,
@@ -103,20 +97,18 @@ module.exports = function(app, passport) {
             throw err;
           res.redirect('/');
         });
-
       }
     });
-
   });
 
   app.post('/api/checktitle', function(req, res) {
-    function check (callback) {
+    var checkTitle = function(callback) {
       Sprites.count({title : req.body.title}, function (err, count) {
         callback(err, count);
       });
     };
 
-    check(function (err, exists) {
+    checkTitle(function (err, exists) {
       if (err) throw err;
       if (exists) res.send(false);
       else res.send(true);
@@ -125,25 +117,11 @@ module.exports = function(app, passport) {
 
 };
 
-function isLoggedIn(req, res, next) {
+var isLoggedIn = function(req, res, next) {
     // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
         return next();
 
     // if they aren't redirect them to the home page
     res.redirect('/login');
-};
-
-function deleteFolderRecursive(path) {
-  if( fs.existsSync(path) ) {
-    fs.readdirSync(path).forEach(function(file,index){
-      var curPath = path + "/" + file;
-      if(fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath);
-      } else { // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
 };
