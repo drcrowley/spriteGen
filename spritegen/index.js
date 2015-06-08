@@ -11,7 +11,6 @@ var Settings   = require('../models/settings');
 module.exports = function(app) {
 
     var filePath;
-    var fileName;
 
     var mMulter = multer({ dest: './public/img/',
         changeDest: function(dest, req, res) {
@@ -30,44 +29,38 @@ module.exports = function(app) {
         rename: function (fieldname, filename) {
             return Date.now()+filename;
         },
-        onFileUploadStart: function (file) {
-            console.log(file.originalname + ' is starting ...');
-        },
         onFileUploadComplete: function (file, req, res) {
-
-            console.log(file.fieldname + ' uploaded to  ' + file.path);
-            fileName = file.originalname;
             filePath = './public/img/' + req.user._id;
-
-            Settings.findOne( {user: req.user._id}, function(err, settings) {
-                if (err) throw err;
-                createSprite(filePath, settings, req);
-            });
+            getSettings(filePath, req);
         }
     });
 
 
     app.post('/api/sprites', mMulter, function(req,res){
+        var sprites = new Sprites({
+            user: req.user._id,
+            title: req.body.title
+        });
 
-            var sprites = new Sprites({
-                user: req.user._id,
-                title: req.body.title
-            });
-
-            sprites.save(function(err) {
-              if (err) throw err;
-              res.redirect('/');
-            });
-
+        sprites.save(function(err) {
+          if (err) throw err;
+          res.redirect('/');
+        });
     });
 
 };
 
+var getSettings = function(filePath, req) {
+    Settings.findOne( {user: req.user._id}, function(err, settings) {
+        if (err) throw err;
+        createSprite(filePath, settings, req);
+    });
+}
+
 var createSprite = function(filePath, settings, req) {
     fs.readdir( filePath + '/elements/' + req.body.title, function(err, files) {
-        if (err) {
-            throw err;
-        }
+        if (err) throw err;
+
         var fileList = [];
 
         for(i=0; i<files.length; i++) {
@@ -85,10 +78,18 @@ var createSprite = function(filePath, settings, req) {
             } catch(err) {
                 mkdirp.sync(dest);
             }
-
             fs.writeFileSync(dest + 'sprite.png', result.image, 'binary');
-
             createCss(result.coordinates, settings, dest, req);
+            var fileListName = []; 
+            for (i in fileList) {
+                var fileName = fileList[i].split('/');
+                fileName = fileName[fileName.length-1];
+                fileListName.push(fileName);
+            }
+            console.log(fileListName);
+            Sprites.update({title: req.body.title}, { $set: { elements : fileListName }}, function (err, elements) {
+                if (err) throw err;
+            });
         });
     });
 };
@@ -107,7 +108,6 @@ var createCss = function(coord, settings, dest, req) {
                 '\twidth: {width}px; \n'+
                 '\theight: {height}px; \n'+
                 '}';
-
     for (i in coord) {
         className = i.split('/');
         className = className[className.length-1].replace(new RegExp("\.(gif|jpg|jpeg|tiff|png)$",'g'), '').replace(new RegExp("^[0-9]+",'g'), '');

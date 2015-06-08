@@ -12,6 +12,9 @@ var SpritesSchema = new mongoose.Schema({
     css: {
         type: String
     },
+    elements: {
+        type: Array
+    },
     date: { type: Date, default: Date.now }
 });
 

@@ -32,7 +32,7 @@ block content
 				.b-sprites.row.m_t3
 					if (!sprites.length)
 						p Спрайты не загружены
-					each val, i in sprites
+					each sprite, i in sprites
 						.col-md-4
 							.b-sprites__item
 								.thumbnail
@@ -43,7 +43,7 @@ block content
 										.btn-group.pull-right
 											a(href="img/#{userId}/sprites/#{sprites[i].title}/sprite.zip").btn.btn-default
 												i.glyphicon.glyphicon-download-alt
-											a(href="#").btn.btn-primary
+											a(href="#" data-toggle="modal" data-target="#modal-#{i}").btn.btn-primary
 												i.glyphicon.glyphicon-pencil
 											a(href="/api/sprites/#{sprites[i]._id}").btn.btn-primary.btn-danger.e-sprite-del
 												i.glyphicon.glyphicon-remove										
@@ -64,6 +64,17 @@ block content
 							$.ajax({
 							   	url:url,
 							    type: 'DELETE',
-							});							
+							});
 						})
 					});
+	each sprite, i in sprites
+		.modal.fade(id="modal-#{i}")
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(data-dismiss="modal")
+							span &times;
+						h4.modal-title= sprites[i].title
+					.modal-body
+						each el, j in sprites[i].elements
+							img(src="img/#{userId}/elements/#{sprites[i].title}/#{sprites[i].elements[j]}")

@@ -1,16 +1,16 @@
 .ico {background: url(sprite.png) 0 0;}
-.ico.ico_i_barrel {
+.ico.ico_i_clear {
+	background-position: -46px -0px;
+	width: 26px; 
+	height: 26px; 
+}
+.ico.ico_i_clear_hover {
+	background-position: -92px -0px;
+	width: 26px; 
+	height: 26px; 
+}
+.ico.ico_i_search_active {
 	background-position: -0px -0px;
-	width: 43px; 
-	height: 55px; 
-}
-.ico.ico_i_base {
-	background-position: -127px -0px;
-	width: 40px; 
-	height: 48px; 
-}
-.ico.ico_i_contract {
-	background-position: -63px -0px;
-	width: 44px; 
-	height: 49px; 
+	width: 26px; 
+	height: 27px; 
 }
