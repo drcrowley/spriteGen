@@ -89,13 +89,8 @@ module.exports = function(app, passport) {
         settings.padding = req.body.padding;
         settings.prefix = req.body.prefix;
         settings.save(function(err) {
-          if (err) throw err;      
-          Sprites.find({}, function(err, sprites) {
-              if (err) throw err;
-              for(i=0; i<sprites.length-1; i++) {
-                spriteGen.createSprite(req, res, sprites[i]._id);
-              };
-          });
+          if (err) throw err;
+          res.redirect('/');
         });
       } else {
         var settings = new Settings({
@@ -105,12 +100,7 @@ module.exports = function(app, passport) {
         });
         settings.save(function(err) {
           if (err) throw err;
-          Sprites.find({}, function(err, sprites) {
-              if (err) throw err;
-              for(i=0; i<sprites.length-1; i++) {
-                spriteGen.createSprite(req, res, sprites[i]._id);
-              };
-          });      
+          res.redirect('/');
         });
       }
     });

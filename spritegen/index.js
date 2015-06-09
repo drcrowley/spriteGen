@@ -33,10 +33,7 @@ var spriteGen = {
                     }
                 }),
     delElements: function(req, res) {
-
         var files = [];
-
-
         for(i=0; i<req.body.elements.length; i++) {
             files.push('./public/img/' + req.user._id + '/elements/' + req.params.id + '/' + req.body.elements[i].name);
         }
@@ -48,7 +45,6 @@ var spriteGen = {
                 spriteGen.createSprite(req, res, req.params.id);
             }
         });
-
     },
     createSprite: function(req, res, spriteId) {
         var userPath = './public/img/' + req.user._id;

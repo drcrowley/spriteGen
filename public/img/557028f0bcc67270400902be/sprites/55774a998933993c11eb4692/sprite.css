@@ -1,0 +1,21 @@
+. {background: url(sprite.png) 0 0;}
+.._i_soc_t {
+	background-position: -0px -0px;
+	width: 35px; 
+	height: 35px; 
+}
+.._i_soc_tw {
+	background-position: -35px -0px;
+	width: 35px; 
+	height: 35px; 
+}
+.._i_soc_vk {
+	background-position: -0px -35px;
+	width: 35px; 
+	height: 35px; 
+}
+.._i_soc_yt {
+	background-position: -35px -35px;
+	width: 34px; 
+	height: 34px; 
+}
