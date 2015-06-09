@@ -32,10 +32,22 @@ var spriteGen = {
                     }
                 }),
     delElements: function(req, res) {
-        console.log(req.params.id);
-        for(i=0; req.body.elements.length; i++) {
-            console.log(req.body.elements[i].name);
+
+        var files = [];
+
+
+        for(i=0; i<req.body.elements.length; i++) {
+            files.push('./public/img/' + req.user._id + '/elements/' + req.params.id + '/' + req.body.elements[i].name);
         }
+        deleteFiles(files, function(err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('all files removed');
+                spriteGen.createSprite(req, res, req.params.id);
+            }
+        });
+
     },
     createSprite: function(req, res, spriteId) {
         var userPath = './public/img/' + req.user._id;
@@ -173,4 +185,19 @@ var deleteFolderRecursive = function(path) {
     });
     fs.rmdirSync(path);
   }
+};
+
+var deleteFiles = function(files, callback){
+    var i = files.length;
+    files.forEach(function(filepath){
+        fs.unlink(filepath, function(err) {
+            i--;
+            if (err) {
+                callback(err);
+                return;
+            } else if (i <= 0) {
+                callback(null);
+            }
+        });
+    });
 };

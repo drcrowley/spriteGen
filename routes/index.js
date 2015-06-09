@@ -76,9 +76,11 @@ module.exports = function(app, passport) {
   // });
 
   app.delete('/api/sprites/:id', function (req, res){
-    
     spriteGen.delSprite(req, res);
-    // spriteGen.delElements(req, res);
+  });
+
+  app.delete('/api/elements/:id', function (req, res){
+    spriteGen.delElements(req, res);
   });
 
   app.post('/api/settings', function(req, res) {
