@@ -9,6 +9,20 @@
 	padding: 9px 0;
 	font-size: 16px;
 }
+.b-elements {
+	text-align: center;
+}
+.b-elements .checkbox-inline input:checked + .img-thumbnail {
+	border-color: #337ab7;
+	box-shadow: 0px 0px 3px #337ab7;
+}
+.b-elements .checkbox-inline input {
+	display: none;
+}
+.b-elements .checkbox-inline {
+	vertical-align: top;
+	margin-bottom: 10px;
+}
 
 .m_t05 {
 	margin-top: 5px;

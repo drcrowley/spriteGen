@@ -71,9 +71,9 @@ module.exports = function(app, passport) {
       });
   });
 
-  // app.post('/api/edit', spriteGen.addElements, function(req,res){
-  //   spriteGen.createSprite(req);
-  // });
+  app.post('/api/elements/:id', spriteGen.addElements, function(req,res){
+     spriteGen.createSprite(req, res, req.params.id);
+  });
 
   app.delete('/api/sprites/:id', function (req, res){
     spriteGen.delSprite(req, res);

@@ -12,7 +12,8 @@ var Settings   = require('../models/settings');
 var spriteGen = {
     addElements: multer({ dest: './public/img/',
                     changeDest: function(dest, req, res) {
-                        var dest = dest + '/'+ req.user._id + '/elements/temp';
+                        var folder = req.params.id || 'temp';
+                        var dest = dest + '/'+ req.user._id + '/elements/' + folder;
                         var stat = null;
                         try {
                             stat = fs.statSync(dest);

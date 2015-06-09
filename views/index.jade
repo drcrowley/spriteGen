@@ -37,7 +37,7 @@ block content
 							.b-sprites__item
 								.thumbnail
 									if(sprites[i].elements.length)
-										img(src="img/#{userId}/sprites/#{sprites[i]._id}/sprite.png").m_t2
+										img(src="img/#{userId}/sprites/#{sprites[i]._id}/sprite.png").m_t2.img-thumbnail
 									else
 										p Отсутствует изображение спрайта
 									.clearfix.m_t2
@@ -66,16 +66,20 @@ block content
 							span &times;
 						h4.modal-title= sprites[i].title
 					.modal-body
-						form(enctype="multipart/form-data" action="/api/elements/#{sprites[i]._id}" method="").e-elements-del
-							each el, j in sprites[i].elements
-								div
-									img(src="img/#{userId}/elements/#{sprites[i]._id}/#{sprites[i].elements[j]}")
-									input(type="checkbox" name="#{sprites[i].elements[j]}")
-							button.button(type="submit") Удалить
-						//- form(enctype="multipart/form-data" action="/api/edit/#{sprites[i]._id}" method="post")
-						//- 	.form-group
-						//- 		label(for='image') Изображения
-						//- 		input(type="file" multiple name="image").e-file
+						form(enctype="multipart/form-data" action="/api/elements/#{sprites[i]._id}" method="").e-elements-del.clearfix
+							.b-elements
+								each el, j in sprites[i].elements
+									label.checkbox-inline
+										input(type="checkbox" name="#{sprites[i].elements[j]}")
+										img(src="img/#{userId}/elements/#{sprites[i]._id}/#{sprites[i].elements[j]}").img-thumbnail
+							button.button.btn-danger.btn.m_t2.pull-right(type="submit")
+								i.glyphicon.glyphicon-remove.m_r1
+								|Удалить
+
+						form(enctype="multipart/form-data" action="/api/elements/#{sprites[i]._id}" method="post")
+							.form-group
+								label(for='image') Изображения
+								input(type="file" multiple name="image").e-file
 	script.
 		$(function() {
 			$('.e-sprite-del').on('click', function(event) {
