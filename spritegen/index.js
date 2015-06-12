@@ -114,7 +114,7 @@ module.exports = spriteGen;
 
 
 var createCss = function(coord, settings, dest, spriteId, res) {
-    var prefix = (settings.prefix) ? settings.prefix : 'ico',
+    var prefix = (settings) ? settings.prefix : 'ico',
         css = '.'+ prefix + ' {background: url(sprite.png) 0 0;}',
         className,
         fileListName = [],

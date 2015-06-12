@@ -38,11 +38,11 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 require('./libs/passport')(passport);
-require('./routes')(app, passport);
+require('./controllers')(app, passport);
 
 
 require('./spritegen');
 
-require('./routes/errors')(app);
+require('./controllers/errors')(app);
 
 module.exports = app;
