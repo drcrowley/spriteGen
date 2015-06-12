@@ -1,0 +1,16 @@
+.ico {background: url(sprite.png) 0 0;}
+.ico.ico_i_soc_ins {
+	background-position: -0px -0px;
+	width: 35px; 
+	height: 35px; 
+}
+.ico.ico_i_soc_lj {
+	background-position: -0px -55px;
+	width: 34px; 
+	height: 34px; 
+}
+.ico.ico_i_soc_t {
+	background-position: -55px -0px;
+	width: 35px; 
+	height: 35px; 
+}

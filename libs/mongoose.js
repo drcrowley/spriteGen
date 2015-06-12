@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
+var config = require('../config');
+
 
 module.exports = function() {
-	mongoose.connect('mongodb://drcrowley:ajnjijgth11@ds041671.mongolab.com:41671/sprite');
+	mongoose.connect(config.get('db'));
 	var db = mongoose.connection;
 
 	db.on('error', function (err) {

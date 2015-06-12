@@ -15,6 +15,9 @@
 			maxFileCount: 30,
 			language: "ru",
 			allowedFileTypes: ["image"],
+			previewSettings: {
+				image: {width: "auto", height: "50px"}
+			}
 		});
 
 		$('.e-collapse').collapse();
